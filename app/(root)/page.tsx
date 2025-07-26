@@ -2,6 +2,10 @@ import Image from "next/image";
 import SearchForm from "../../components/SearchForm";
 import { title } from "process";
 import StartupCard from "@/components/StartupCard";
+import { client } from "@/sanity/lib/client";
+import { STARTUPS_QUERY } from "@/sanity/lib/query";
+import { replace } from "sanity/migrate";
+import { StartupTypeCard } from "@/components/StartupCard";
 // the home page is server side rendered
 export default async function Home({
   searchParams,
@@ -9,19 +13,21 @@ export default async function Home({
   searchParams: Promise<{ query?: string }>;
 }) {
   const query = (await searchParams).query;
-  const posts = [
-    {
-      _createdAt: new Date(),
-      views: 55,
-      author: { _id: 1, name: "Adrian" },
-      _id: 1,
-      description: "This is a description",
-      image:
-        "https://www.citigroup.com/rcs/v1/media/citigpa/akpublic/storage/retrieveMediaFile/675036f1421484374e1165de.jpg",
-      category: "Robots",
-      title: "We Robots",
-    },
-  ];
+  const posts = await client.fetch(STARTUPS_QUERY);
+  console.log(JSON.stringify(posts, null, 2));
+  // const posts = [
+  //   {
+  //     _createdAt: new Date(),
+  //     views: 55,
+  //     author: { _id: 1, name: "Adrian" },
+  //     _id: 1,
+  //     description: "This is a description",
+  //     image:
+  //       "https://www.citigroup.com/rcs/v1/media/citigpa/akpublic/storage/retrieveMediaFile/675036f1421484374e1165de.jpg",
+  //     category: "Robots",
+  //     title: "We Robots",
+  //   },
+  // ];
   return (
     <>
       <section className="pink_container">
@@ -44,7 +50,7 @@ export default async function Home({
         </p>
         <ul className="mt-7 card_grid">
           {posts?.length > 0 ? (
-            posts.map((post: StartupCardType, index: number) => (
+            posts.map((post: StartupTypeCard, index: number) => (
               <StartupCard key={post?._id} post={post} />
             ))
           ) : (
