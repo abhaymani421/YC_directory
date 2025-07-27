@@ -6,6 +6,8 @@ import { client } from "@/sanity/lib/client";
 import { STARTUPS_QUERY } from "@/sanity/lib/query";
 import { replace } from "sanity/migrate";
 import { StartupTypeCard } from "@/components/StartupCard";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
+
 // the home page is server side rendered
 export default async function Home({
   searchParams,
@@ -13,7 +15,8 @@ export default async function Home({
   searchParams: Promise<{ query?: string }>;
 }) {
   const query = (await searchParams).query;
-  const posts = await client.fetch(STARTUPS_QUERY);
+  const params = { search: query || null };
+  const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY, params }); // this ensure to revalidate the page when ever new changes are made
   console.log(JSON.stringify(posts, null, 2));
   // const posts = [
   //   {
@@ -59,6 +62,7 @@ export default async function Home({
         </ul>
         {/* card_grid applies a 3 column grid on medium devices and 2 column grid on small devices*/}
       </section>
+      <SanityLive />
     </>
   );
 }
