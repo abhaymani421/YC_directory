@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import path from "path";
+import { Toaster } from "@/components/ui/toaster";
 import "easymde/dist/easymde.min.css"; //markdown plugin also requires additional CSS
 //we have added local fonts in our fonts folder, which we are using locally in out project, without using any external services like google fonts
 const workSans = localFont({
@@ -61,7 +62,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={workSans.variable}>{children}</body>
+      <body className={workSans.variable}>
+        {children}
+        <Toaster />{" "}
+        {/*if something goes wrong, we use this to diaplay a shadcn toast */}
+      </body>
     </html>
   );
 }
