@@ -7,7 +7,7 @@ import { STARTUPS_QUERY } from "@/sanity/lib/query";
 import { replace } from "sanity/migrate";
 import { StartupTypeCard } from "@/components/StartupCard";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
-
+import { auth } from "@/auth";
 // the home page is server side rendered
 export default async function Home({
   searchParams,
@@ -16,21 +16,11 @@ export default async function Home({
 }) {
   const query = (await searchParams).query;
   const params = { search: query || null };
+  const session = await auth();
+  console.log(session?.id);
   const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY, params }); // this ensure to revalidate the page when ever new changes are made
   console.log(JSON.stringify(posts, null, 2));
-  // const posts = [
-  //   {
-  //     _createdAt: new Date(),
-  //     views: 55,
-  //     author: { _id: 1, name: "Adrian" },
-  //     _id: 1,
-  //     description: "This is a description",
-  //     image:
-  //       "https://www.citigroup.com/rcs/v1/media/citigpa/akpublic/storage/retrieveMediaFile/675036f1421484374e1165de.jpg",
-  //     category: "Robots",
-  //     title: "We Robots",
-  //   },
-  // ];
+
   return (
     <>
       <section className="pink_container">

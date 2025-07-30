@@ -45,7 +45,18 @@ export const STARTUP_BY_ID_QUERY = defineQuery(`*[_type=="startup" && _id == $id
 export const STARTUP_VIEWS_QUERY = defineQuery(`*[_type == "startup" && _id==$id][0]{
   _id,views
 }`) ;
+
+export const AUTHOR_BY_GITHUB_ID_QUERY = defineQuery(`
+  *[_type == "author" && id==$id][0]{
+      _id,
+      id,
+      name,
+      username,
+      email,
+      image,
+      bio
   
+  }`);
   
   // 🔍 What This Query Does (Plain English):
 // Fetch all documents of type startup, but only those that have a defined slug. Then sort them by creation time (newest first), and for each startup, return a detailed set of fields — including author info by following the reference.
