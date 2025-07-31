@@ -5,6 +5,7 @@ import path from "path";
 import { Toaster } from "@/components/ui/toaster";
 import "easymde/dist/easymde.min.css"; //markdown plugin also requires additional CSS
 //we have added local fonts in our fonts folder, which we are using locally in out project, without using any external services like google fonts
+
 const workSans = localFont({
   src: [
     {

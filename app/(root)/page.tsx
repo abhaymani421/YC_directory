@@ -8,6 +8,7 @@ import { replace } from "sanity/migrate";
 import { StartupTypeCard } from "@/components/StartupCard";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { auth } from "@/auth";
+
 // the home page is server side rendered
 export default async function Home({
   searchParams,
@@ -50,8 +51,10 @@ export default async function Home({
             <p className="no-results">No startups found</p>
           )}
         </ul>
+
         {/* card_grid applies a 3 column grid on medium devices and 2 column grid on small devices*/}
       </section>
+
       <SanityLive />
     </>
   );
