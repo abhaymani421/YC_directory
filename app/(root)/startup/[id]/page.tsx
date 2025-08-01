@@ -11,13 +11,23 @@ import { Result } from "postcss";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import View from "@/components/View";
+import { PLAYLIST_BY_SLUG_QUERY } from "@/sanity/lib/query";
+import StartupCard from "@/components/StartupCard";
+import { StartupTypeCard } from "@/components/StartupCard";
 //we are using the PPR stratergy here -->
 const md = markdownit();
 export const experimental_ppr = true;
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
+  // this is an example of parellel fetching--->
+  // here the total time in fetching the results is the duration of the longest request and not the sum of both the requests which is the case in sequential fetching
+  const [post, { select: editorPosts }] = await Promise.all([
+    client.fetch(STARTUP_BY_ID_QUERY, { id }),
+    client.fetch(PLAYLIST_BY_SLUG_QUERY, {
+      slug: "editor-picks-new",
+    }),
+  ]);
 
-  const post = await client.fetch(STARTUP_BY_ID_QUERY, { id });
   if (!post) return notFound();
   const parsedContent = md.render(post?.pitch || ""); //parses the markdown content so we can display it as HTML
   return (
@@ -67,6 +77,17 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <hr className="divider" />
         {/*Editor Selected startups */}
+        {editorPosts?.length > 0 && (
+          <div className="max-w-4xl mx-auto">
+            <p className="text-30-semibold">Editor Picks</p>
+
+            <ul className="mt-7 card_grid-sm">
+              {editorPosts.map((post: StartupTypeCard, i: number) => (
+                <StartupCard key={i} post={post} />
+              ))}
+            </ul>
+          </div>
+        )}
         <Suspense fallback={<Skeleton className="view_skeleton" />}>
           {/*here we can add the code that will be displayed while the browser is loading the dynamic component */}
           <View id={id} />
