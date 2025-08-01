@@ -16,6 +16,7 @@ const StartupForm = () => {
   const { toast } = useToast();
   const router = useRouter();
   const handleFormSubmit = async (prevState: any, formData: FormData) => {
+    console.log("Hello World");
     try {
       const formValues = {
         title: formData.get("title") as string,
