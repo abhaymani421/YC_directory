@@ -21,11 +21,11 @@ export const createPitch = async (state : any,form : FormData,pitch : string)=>{
             category,
             image : link,
             slug : {
-                _type : slug,
+                _type : "slug",
                 current : slug,
             },
             author : {
-                _type : 'refrence',
+                _type : 'reference',
                 _ref : session?.id,
             },
         };
